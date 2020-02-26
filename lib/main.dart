@@ -16,10 +16,12 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.red,
         fontFamily: 'QuickSand',
         textTheme: ThemeData.light().textTheme.copyWith(
-            title: TextStyle(
-                fontFamily: 'OpenSans',
-                fontSize: 18,
-                fontWeight: FontWeight.bold)),
+              title: TextStyle(
+                  fontFamily: 'OpenSans',
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold),
+              button: TextStyle(color: Colors.white),
+            ),
         appBarTheme: AppBarTheme(
           textTheme: ThemeData.light().textTheme.copyWith(
               title: TextStyle(
@@ -61,11 +63,11 @@ class _MyHomePageState extends State<MyHomePage> {
     }).toList();
   }
 
-  void _addNewTransactions(String title, double amount) {
+  void _addNewTransactions(String title, double amount, DateTime chosenDate) {
     final newTransaction = Transaction(
         title: title,
         amount: amount,
-        date: DateTime.now(),
+        date: chosenDate,
         id: DateTime.now().toString());
     setState(() {
       _transactions.add(newTransaction);
@@ -85,6 +87,15 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
+  void _deleteTransaction(String id)
+  {
+    setState(() {
+      _transactions.removeWhere((tx) {
+        return tx.id == id;
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -101,7 +112,7 @@ class _MyHomePageState extends State<MyHomePage> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           Chart(_recentTransactions),
-          TransactionList(_transactions),
+          TransactionList(_transactions, _deleteTransaction),
         ],
       ),
       floatingActionButton: FloatingActionButton(
@@ -111,5 +122,3 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 }
-
-// 40
